@@ -1,0 +1,131 @@
+{
+	"pages": [ 	
+
+		{
+			
+			"path": "pages/index/index",
+			
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/cart/cart",
+			
+			"style": {
+				"navigationBarTitleText": "购物车",
+				"navigationBarBackgroundColor": "#f26b11",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/confirm/confirm",
+			"style": {
+				"navigationBarTitleText": "确认订单",
+				"navigationBarBackgroundColor": "#f26b11",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			// 页面路径 --  我的
+			"path": "pages/mine/mine",
+			
+			"style": {
+				"navigationBarTitleText": "我的",
+				"navigationBarBackgroundColor": "#f26b11"
+			}
+		},
+		{
+			// 页面路径 -- 首页
+			"path": "pages/classify/classify",
+			
+			"style": {
+				"navigationBarTitleText": "商品分类",
+				"navigationBarBackgroundColor": "#f26b11"
+			}
+		},
+		{
+			// 页面路径 -- 首页
+			"path": "pages/details/details",
+			
+			"style": {
+				"navigationBarTitleText": "商品详情",
+				"navigationBarBackgroundColor": "#f26b11"
+			}
+		}
+		, {
+			"path": "pages/product/product",
+			"style": {
+				"navigationBarTitleText": "商品列表"
+			}
+		}
+		, {
+			"path": "pages/send/send",
+			"style": {
+				"navigationBarTitleText": "发送验证码"
+			}
+		}
+		, {
+			"path": "pages/search/search",
+			"style": {
+				"navigationBarTitleText": "搜索结果"
+			}
+		}, {
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "搜索结果"
+			}
+		}, {
+			"path": "pages/test/test",
+			"style": {
+				"navigationBarTitleText": "测试"
+			}
+		}
+	   
+    ],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "首页",
+		"navigationBarBackgroundColor": "#fff",
+		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		"color": "#000",
+		"selectedColor": "#ff750b",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [{
+				"pagePath": "pages/index/index",
+				"iconPath": "static/tabBar/shouye.png",
+				"selectedIconPath": "static/tabBar/Ashouye.png",
+				"text": "首页"
+			}, {
+				"pagePath": "pages/cart/cart",
+				"iconPath": "static/tabBar/gouwuchekong.png",
+				"selectedIconPath": "static/tabBar/Agouwuchekong.png",
+				"text": "购物车"
+			},
+			{
+				"pagePath": "pages/mine/mine",
+				"iconPath": "static/tabBar/wode.png",
+				"selectedIconPath": "static/tabBar/Awode.png",
+				"text": "我的"
+			}
+		]
+	},
+	"condition":{
+		"list":[
+			{
+				"name":"首页",
+				"path":"/pages/index/index",
+				"query":"age=21"
+			},{
+				"name":"分类",
+				"path":"/pages/classify/classify"
+			},{
+				"name":"test",
+				"path":"pages/test/test"
+			}
+		]
+	}
+}
