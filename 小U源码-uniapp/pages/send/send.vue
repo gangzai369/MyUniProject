@@ -120,7 +120,11 @@
 					title:'登录成功!!!',
 				})
 				// 登录成功token存储到本地
-				uni.setStorageSync('userInfo',res.data.list)
+				uni.setStorageSync('userInfo',res.data.list);
+				// 登录成功跳转到主页
+				uni.navigateTo({
+					url:'/pages/index/index'
+				})
 			},
 		}
 	}

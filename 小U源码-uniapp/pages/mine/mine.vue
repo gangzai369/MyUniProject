@@ -4,9 +4,11 @@
 		<view class="mineTop">
 			<view class="mineTop_left">
 				<view class="mineTop_left_image"><image src="../../static/mine/timg.jpg" mode=""></image></view>
-				<view class="mineTop_left_info">
-					<label for="" style="color: #fff;">小U</label>
-					<label for="">V1</label>
+				<view class="mineTop_left_info" v-if="userInfo.nickname">
+					<label for="" style="color: #fff;">{{userInfo.nickname}}</label>
+				</view>
+				<view class="login" v-else>
+					<button size="mini" type="primary" @click="toSend">登录</button>
 				</view>
 			</view>
 			<view class="mineTop_right">
@@ -88,7 +90,33 @@
 </template>
 
 <script>
-export default {};
+	// 引入判断登录方法
+	import {isLogin} from '../../utils/http.js'
+export default {
+	data(){
+		return{
+			userInfo:{},	//保存用户信息
+		}
+	},
+	// 加载判断
+	onLoad() {
+		isLogin();
+		this.getInfo();
+	},
+	methods:{
+		getInfo(){
+			var info = wx.getStorageSync('userInfo');
+			this.userInfo = info;
+			console.log(this.userInfo);
+		},
+		// 判断未登录进行登录
+		toSend(){
+			uni.navigateTo({
+				url:'/pages/send/send'
+			})
+		}
+	}
+};
 </script>
 <style>
 @import url('../../common/css/mine.css');

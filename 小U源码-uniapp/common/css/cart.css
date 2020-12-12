@@ -92,7 +92,7 @@
 	height: 130rpx;
 	border-top: 1px solid #F1F1F1;
 	position: fixed;
-	bottom: 0;
+	bottom: 100rpx;
 	background: #FFFFFF;
 	display: flex;
 	

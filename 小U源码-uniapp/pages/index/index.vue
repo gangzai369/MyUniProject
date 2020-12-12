@@ -199,10 +199,7 @@
 				console.log(err);
 			})
 			var endTime = res.data.list[0].endtime;
-			var timer = setInterval(this.sumTime,1000,endTime)
-			if(this.hour==0&&this.min==0&&this.sec==0){
-				clearInterval(timer)
-			}
+			var timer = setInterval(this.sumTime,1000,endTime,timer)
 		  },
 		  // 首页获取底部切换数据
 		  async getData(){
@@ -215,12 +212,15 @@
 		  changeData(id){
 			  this.dataIndex = id;
 		  },
-		  sumTime(endTime){
+		  sumTime(endTime,timer){
 			var nowTime = new Date().getTime();
 			var time = Math.floor((endTime - nowTime)/1000);
 			this.hour = Math.floor(time/3600);
 			this.min = Math.floor(time%3600/60);
 			this.sec = time%60;
+			if(this.hour==0&&this.min==0&&this.sec==0){
+				clearInterval(timer)
+			}
 		  },
 		  // 携带参数跳转到分类页
 		  toSearch(idx){
