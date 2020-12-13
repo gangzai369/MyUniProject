@@ -20,7 +20,7 @@
 					phone:'15237227837',
 					nickname:'港仔',
 					password:123
-				},"POST").catch(err=>{
+				},{},"POST").catch(err=>{
 					console.log(err);return;
 				})
 				console.log(res);
@@ -30,7 +30,7 @@
 				var res = await this.$http('/api/login',{
 					phone:'15237227837',
 					password:123
-				},"POST").catch(err=>{
+				},{},"POST").catch(err=>{
 					console.log(err);return;
 				})
 				console.log(res);

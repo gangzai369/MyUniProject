@@ -49,7 +49,7 @@
 				<label class="footd2sp2">不含运费，已优惠￥0.00</label>
 			</view>
 			<!-- 跳到提交订单，结算页面 -->
-			<view class="footd3">
+			<view class="footd3" @click="toOrder">
 				<!-- 被选中的商品的个数 -->
 				<label>去结算({{allSum}}件)</label>
 			</view>
@@ -70,9 +70,10 @@
 				token:'',		//保存token
 			}
 		},
-		onShow() {
-			this.getCartList();
-			setTimeout(this.toCount,20)
+		async onShow() {
+			await this.getCartList();
+			await this.toCount();
+			// setTimeout(this.toCount,20)
 		},
 		methods: {
 			async getCartList() {
@@ -101,6 +102,7 @@
 						icon: 'none'
 					})
 				}
+				this.upCartList(item)		//调用更新函数
 			},
 			// 购买减少
 			reduce(item) {
@@ -113,6 +115,14 @@
 					return;
 				}
 				item.num--;
+				this.upCartList(item)		//调用更新函数
+			},
+			// 更新购物车列表
+			async upCartList(item){
+				var res = await this.$http('/api/cartedit',{id:item.id,num:item.num,checked:item.status},{authorization:this.token,'content-type':'application/x-www-form-urlencoded'}).catch(err=>{
+					console.log(err);return;
+				})
+				await this.toCount();		//重新调用计算函数
 			},
 			// 判断是否全选，单选影响全选
 			isOneCheck(item){
@@ -174,9 +184,42 @@
 						title:'删除成功!'
 					})
 					// 页面重新渲染
-					this.getCartList();
-					setTimeout(this.toCount,20);		//解决异步问题
+					await this.getCartList();
+					await this.toCount()		//通过await解决异步问题
 				}
+			},
+			// 跳转到订单页
+			async toOrder(){
+				console.log(this.cartList);
+				var userInfo = uni.getStorageSync('userInfo');
+				var nowTime = new Date().getTime();
+				var params = {
+					uid:userInfo.uid,
+					username:userInfo.nickname,
+					userphone:userInfo.phone,
+					address:'北京市朝阳区五方桥101号',
+					countmoney:this.allPrice,
+					countnumber:this.allSum,
+					addtime:nowTime
+				}
+				// 获取idstr
+				var arr = this.cartList.map(item=>{
+					return item.id
+				});
+				var idstr = arr.join(',');		//转为要提交的格式
+				console.log(idstr);
+				let res = await this.$http('/api/orderadd',{params,idstr},{
+					authorization:this.token,
+					'content-type':'application/x-www-form-urlencoded'
+				}).catch(err=>{console.log(err);return;})
+				console.log(res);
+				uni.showToast({
+					title:res.data.msg
+				})
+				// 跳转到订单页
+				uni.navigateTo({
+					url:'/pages/confirm/confirm'
+				})
 			}
 		}
 	};

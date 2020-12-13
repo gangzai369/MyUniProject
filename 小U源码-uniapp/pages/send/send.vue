@@ -108,21 +108,21 @@
 					return;
 				}
 				// 调用登录接口
+				console.log(this.phone);
 				// 登录
 				var res = await this.$http('/api/login',{
 					phone:this.phone,
 					password:123
-				},"POST").catch(err=>{
+				},{},"POST").catch(err=>{
 					console.log(err);return;
 				})
-				console.log(res.data);
 				uni.showToast({
 					title:'登录成功!!!',
 				})
 				// 登录成功token存储到本地
 				uni.setStorageSync('userInfo',res.data.list);
 				// 登录成功跳转到主页
-				uni.navigateTo({
+				uni.switchTab({
 					url:'/pages/index/index'
 				})
 			},

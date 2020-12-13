@@ -198,7 +198,7 @@
 			var res = await this.$http('/api/getseckill').catch(err=>{
 				console.log(err);
 			})
-			var endTime = res.data.list[0].endtime;
+			var endTime = res.data.list[0].endtime;		//活动终止时间
 			var timer = setInterval(this.sumTime,1000,endTime,timer)
 		  },
 		  // 首页获取底部切换数据

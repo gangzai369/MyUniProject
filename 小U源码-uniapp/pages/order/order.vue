@@ -2,56 +2,20 @@
 	<view>
 		<uni-search-bar radius="100" bgColor="#ffff"></uni-search-bar>
 		<view class="list">
-			<view class="row">
+			<view class="row" v-for="(item,index) in goodsList" :key="item.id" v-if="goodsList.length>0">
 				<view class="products">
 					<view class="imagebox" v>
-						<image src="/static/classify/1.jpg" mode="widthFix"></image>
-						<text>雅诗兰黛</text>
+						<image :src="baseUrl+item.child[0].img" mode="widthFix"></image>
+						<text>{{item.child[0].goodsname}}</text>
 					</view>
 				</view>
 				<view class="info">
-					<text  space="nbsp">总计45商品  </text>  
-					<text>应付金额 ￥56</text>
-				</view>
-			</view>
-			<view class="row">
-				<view class="products">
-					<view class="imagebox" v>
-						<image src="/static/classify/1.jpg" mode="widthFix"></image>
-						<text>雅诗兰黛</text>
-					</view>
-				</view>
-				<view class="info">
-					<text  space="nbsp">总计45商品  </text>  
-					<text>应付金额 ￥56</text>
-				</view>
-			</view>
-			<view class="row">
-				<view class="products">
-					<view class="imagebox" v>
-						<image src="/static/classify/1.jpg" mode="widthFix"></image>
-						<text>雅诗兰黛</text>
-					</view>
-				</view>
-				<view class="info">
-					<text  space="nbsp">总计45商品  </text>  
-					<text>应付金额 ￥56</text>
-				</view>
-			</view>
-			<view class="row">
-				<view class="products">
-					<view class="imagebox" v>
-						<image src="/static/classify/1.jpg" mode="widthFix"></image>
-						<text>雅诗兰黛</text>
-					</view>
-				</view>
-				<view class="info">
-					<text  space="nbsp">总计45商品  </text>  
-					<text>应付金额 ￥56</text>
+					<text space="nbsp">总计{{item.countnumber}}商品 </text>
+					<text>应付金额 ￥{{item.countmoney}}</text>
 				</view>
 			</view>
 		</view>
-		<view class="tishi">
+		<view class="tishi" v-if="goodsList.length==0">
 			没有数据亲！
 		</view>
 	</view>
@@ -59,32 +23,59 @@
 
 <script>
 	import uniSearchBar from '@/components/uni-search-bar/uni-search-bar.vue'
-	export default{
-		   components: {uniSearchBar}
-		
+	import {baseUrl} from '../../utils/config.js'
+	export default {
+		components: {
+			uniSearchBar
+		},
+		data(){
+			return{
+				goodsList:[],		//提交的商品订单
+				baseUrl,			//基地址
+			}
+		},
+		methods:{
+			async getOrder(){
+				var userInfo = uni.getStorageSync('userInfo');
+				var res = await this.$http('/api/orders',{uid:userInfo.uid},{
+					authorization:userInfo.token,
+					'content-type':'application/x-www-form-urlencoded'
+				}).catch(err=>{console.log(err);return;})
+				this.goodsList = res.data.list;
+			},
+		},
+		async onLoad() {
+			uni.showToast({
+				title:'提交成功!',
+				duration:1000
+			})
+			await this.getOrder();
+		}
 	}
 </script>
 <style>
-
-	.row{
+	.row {
 		margin: 10rpx 20rpx;
 		/* height: 240rpx; */
 		border: 1rpx solid #AAAAAA;
 		border-radius: 30rpx;
 	}
-	
-	.imagebox{
+
+	.imagebox {
 		float: left;
-		margin:10rpx;
+		margin: 10rpx;
 	}
-	.products{
+
+	.products {
 		overflow: hidden;
 	}
-	image{
+
+	image {
 		width: 160rpx;
 		margin-left: 10rpx;
 	}
-	.info{
+
+	.info {
 		/* position: absolute;
 		top: 180rpx;
 		right: 50rpx; */
@@ -95,14 +86,17 @@
 		padding: 20rpx;
 		text-align: right;
 	}
-	.info text:nth-of-type(2){
+
+	.info text:nth-of-type(2) {
 		color: red;
 	}
-	.info text:nth-of-type(3){
+
+	.info text:nth-of-type(3) {
 		font-size: 20rpx;
 		color: #AAAAAA;
 	}
-	.tishi{
+
+	.tishi {
 		line-height: 200rpx;
 		text-align: center;
 		font-size: 40rpx;
