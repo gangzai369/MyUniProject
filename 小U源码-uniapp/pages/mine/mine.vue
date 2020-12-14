@@ -18,7 +18,7 @@
 
 		<!-- 订单状态 -->
 		<view class="order_state">
-			<view class="order_state_list">
+			<view class="order_state_list" @click="toOrder">
 				<image src="/static/mine/quanbudingdan.png" mode=""></image>
 				<label class="list_text">全部订单</label>
 			</view>
@@ -113,6 +113,12 @@ export default {
 		toSend(){
 			uni.navigateTo({
 				url:'/pages/send/send'
+			})
+		},
+		// 跳转订单页
+		toOrder(){
+			uni.navigateTo({
+				url:'/pages/order/order?from=mine'
 			})
 		}
 	}

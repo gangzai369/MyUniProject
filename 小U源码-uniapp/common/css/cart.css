@@ -6,7 +6,6 @@
 	/* height: 100vh; */
 	border: 4rpx solid #F1F1F1;
 	margin-top: 20rpx;
-	
 }
 .top{
 	margin-bottom: 140rpx;
@@ -19,6 +18,24 @@
 	/* 靠上 */
 	vertical-align:top; 
 
+}
+/*  */
+.shopbox image{
+	width: 350rpx;
+	height: 350rpx;
+	display: block;
+	margin: 50rpx auto;
+}
+.shoptext{
+	font-family: cursive;
+	color: #aaa;
+	font-size: 40rpx;
+	text-align: center;
+}
+.shopbox button{
+	width: 200rpx;
+	display: block;
+	margin: 50rpx auto;
 }
 .cartDel{
 	height: 200rpx;
@@ -70,6 +87,12 @@
 
 .cartInfo_info label{
 	margin-top: 23rpx;
+}
+.cartInfo_info .firInfo{
+	width: 280rpx;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 
 /* 加减数量 */

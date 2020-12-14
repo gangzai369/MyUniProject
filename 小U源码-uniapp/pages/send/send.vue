@@ -2,19 +2,19 @@
 	<view class="box">
 		<view class="row">
 			<text>手机号</text>
-			<input type="text" v-model="phone" maxlength="11"/>
+			<input @focus="toGetCode" type="text" v-model="phone" maxlength="11"/>
 		</view>
 		<view class="row">
 			<view class="send">
-				<text class="captcha" @click="getCode">验证码</text>
+				<button :disabled="!codeTag" size="mini" class="captcha" @click="getCode">验证码</button>
 				<text>{{reTime}}</text>
 			</view>
-			<input type="text" v-model="code"  placeholder="- - - -" maxlength="4" />
+			<input @input="toSend" type="text" v-model="code"  placeholder="- - - -" maxlength="4" :disabled="!inpTag" />
 		</view>
 		<view class="row">
 			<text style="font-size: 23rpx;">收不到验证码？试试 <text style="color:#00BB00;font-size: 23rpx;"> 语音验证</text></text>
 			<!--   -->
-			<button type="primary" style="width: 90%;border-radius: 80rpx;margin-top: 50rpx;" @click="toLogin">登录</button>
+			<button :disabled="!loginTag" type="primary" style="width: 90%;border-radius: 80rpx;margin-top: 50rpx;" @click="toLogin">登录</button>
 		</view>
 		<view class="row">
 			<text style="color: #006699;text-align: center;" >通过微信授权登录</text>
@@ -26,13 +26,28 @@
 	export default{
 		data(){
 			return{
-				reTime:45,	//剩余时间
+				reTime:null,	//剩余时间
 				phone:'',	//验证的手机号
 				code:null,	//输入的验证码
-				reCode:''	//生成的验证码
+				reCode:'',	//生成的验证码
+				codeTag:false,	//验证码禁用
+				loginTag:false,	//登录禁用
+				inpTag:false,	//第二个输入框禁用
 			}
 		},
 		methods:{
+			// input聚焦显示button
+			toGetCode(){
+				this.codeTag = true;
+			},
+			// 验证码聚焦显示登录按钮
+			toSend(){
+				if(this.code==null||this.code==''){
+					this.loginTag = false;	//内容为空，禁用按钮
+					return;
+				}
+				this.loginTag = true;	//放开按钮
+			},
 			// 获取验证码
 			getCode(){
 				uni.showLoading({
@@ -52,6 +67,7 @@
 			},
 			// 给接收到的手机号码发短信
 			async sendCode(timer){
+				this.codeTag = false;	//点击之后禁用获取验证码按钮
 				var tPhone = /^1[34578]\d{9}$/;		//手机号正则校验
 				var phone = this.phone.trim()
 				if(phone==''){
@@ -60,7 +76,6 @@
 						icon:'none'
 					})
 					clearInterval(timer);
-					this.reTime = 45;
 					return;
 				}
 				if(!tPhone.test(phone)){
@@ -69,36 +84,22 @@
 						icon:'none'
 					})
 					clearInterval(timer);
-					this.reTime = 45;
 					return;
 				}
+				this.reTime = 45;	//倒计时时间
 				var res = await this.$http('/api/sms',{phone:this.phone}).catch(err=>{
 					console.log(err);return;
 				})
 				uni.showToast({
 					title:'已发送!!!',
 				})
+				this.codeTag = false;		//禁用code获取
+				this.inpTag = true;		//开启input框
 				this.reCode = res.data.list.code;	//接收到验证码
 				console.log(this.reCode);
 			},
 			// 点击登录
 			async toLogin(){
-				if(this.phone==''){
-					uni.showToast({
-						title:"手机号不能为空",
-						duration:1000,
-						icon:'none'
-					})
-					return;
-				}
-				if(this.code==''){
-					uni.showToast({
-						title:"请输入验证码!",
-						duration:1000,
-						icon:'none'
-					})
-					return;
-				}
 				if(this.code!=this.reCode){
 					uni.showToast({
 						title:"验证码输入有误",
@@ -108,7 +109,6 @@
 					return;
 				}
 				// 调用登录接口
-				console.log(this.phone);
 				// 登录
 				var res = await this.$http('/api/login',{
 					phone:this.phone,
@@ -162,7 +162,8 @@
 	.captcha{
 		background: #007cfe;
 		color: white;
-		padding: 10rpx 20rpx;
+		padding: 0rpx 20rpx;
 		border-radius: 13rpx;
+		margin-left: 0rpx;
 	}
 </style>

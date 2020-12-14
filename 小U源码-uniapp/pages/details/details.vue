@@ -90,7 +90,6 @@
 				}).catch(err => {
 					console.log(err);
 				})
-				// console.log(res.data.list[0]);
 				this.obj = res.data.list[0]
 			},
 			// 购买添加
@@ -166,6 +165,27 @@
 			// 去购买
 			toPay() {
 				// 跳转到订单确认页
+				uni.showModal({
+					title: '订单确认',
+					content: "购买规格为"+(this.obj.specsattr)+"此商品" + this.sellNum + "件吗",
+					success: async (res) => {
+						if (res.confirm) {
+							// 添加到数据库
+							var res = await this.$http('/api/cartadd', shopObj, {
+								authorization: token,
+								'content-type': 'application/x-www-form-urlencoded'
+							}).catch(err => {
+								console.log(err);
+								return;
+							})
+							if (res.data.code == 200) {
+								uni.showToast({
+									title: '添加成功!'
+								})
+							}
+						}
+					}
+				})
 			}
 		},
 

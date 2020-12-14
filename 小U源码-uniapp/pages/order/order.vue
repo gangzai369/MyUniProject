@@ -4,14 +4,14 @@
 		<view class="list">
 			<view class="row" v-for="(item,index) in goodsList" :key="item.id" v-if="goodsList.length>0">
 				<view class="products">
-					<view class="imagebox" v>
+					<view class="imagebox">
 						<image :src="baseUrl+item.child[0].img" mode="widthFix"></image>
 						<text>{{item.child[0].goodsname}}</text>
 					</view>
 				</view>
 				<view class="info">
 					<text space="nbsp">总计{{item.countnumber}}商品 </text>
-					<text>应付金额 ￥{{item.countmoney}}</text>
+					<text>已付金额 ￥{{item.countmoney}}</text>
 				</view>
 			</view>
 		</view>
@@ -23,32 +23,42 @@
 
 <script>
 	import uniSearchBar from '@/components/uni-search-bar/uni-search-bar.vue'
-	import {baseUrl} from '../../utils/config.js'
+	import {
+		baseUrl
+	} from '../../utils/config.js'
 	export default {
 		components: {
 			uniSearchBar
 		},
-		data(){
-			return{
-				goodsList:[],		//提交的商品订单
-				baseUrl,			//基地址
+		data() {
+			return {
+				goodsList: [], //提交的商品订单
+				baseUrl, //基地址
 			}
 		},
-		methods:{
-			async getOrder(){
+		methods: {
+			async getOrder() {
 				var userInfo = uni.getStorageSync('userInfo');
-				var res = await this.$http('/api/orders',{uid:userInfo.uid},{
-					authorization:userInfo.token,
-					'content-type':'application/x-www-form-urlencoded'
-				}).catch(err=>{console.log(err);return;})
+				var res = await this.$http('/api/orders', {
+					uid: userInfo.uid
+				}, {
+					authorization: userInfo.token,
+					'content-type': 'application/x-www-form-urlencoded'
+				}).catch(err => {
+					console.log(err);
+					return;
+				})
 				this.goodsList = res.data.list;
 			},
 		},
-		async onLoad() {
-			uni.showToast({
-				title:'提交成功!',
-				duration:1000
-			})
+		async onLoad(e) {
+			console.log(e.from);
+			if (e.from != 'mine') {
+				uni.showToast({
+					title: '提交成功!',
+					duration: 1000
+				})
+			}
 			await this.getOrder();
 		}
 	}
